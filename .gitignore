@@ -1,0 +1,6 @@
+# Ignore big cps files
+*.csv
+*.cps
+*.dat
+*.zip
+*.pdf

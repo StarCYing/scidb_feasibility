@@ -1,0 +1,73 @@
+
+R version 3.2.2 (2015-08-14) -- "Fire Safety"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> # library(scidb)
+> # scidbconnect()
+> 
+> library(readr)
+> 
+> ntia <- read_csv('./jul13-cps.csv')
+|================================================================================| 100%  590 MB
+Warning message:
+1047 problems parsing './jul13-cps.csv'. See problems(...) for more details. 
+> 
+> isPerson = ntia$prtage >= 3 & ntia$prpertyp != 3 & ntia$hrmis != 1 & ntia$hrmis != 5
+> isHouseholder = ntia$perrp > 0 & ntia$perrp < 3 & ntia$hrhtype > 0 & ntia$hrhtype < 9 & ntia$hrmis != 1 & ntia$hrmis != 5
+> isAdult = isPerson & ntia$prtage >= 15
+> isRespondent = ntia$puelgflg == 20 & ntia$hrmis != 1 & ntia$hrmis != 5
+> personWeight <- ntia$pwsupwgt
+> householdWeight <- ntia$hwsupwgt
+> respondentWeight <- ntia$pwprmwgt
+> 
+> # Demographic variables
+> ageGroup <- rep('4 65+', length(ntia$prtage))
+> ageGroup[ntia$prtage >= -1 & ntia$prtage <= 2] = NA
+> ageGroup[ntia$prtage >= 3 & ntia$prtage <= 9] = '0 3-14'
+> ageGroup[ntia$prtage >= 10 & ntia$prtage <= 14] = '0 3-14'
+> ageGroup[ntia$prtage >= 15 & ntia$prtage <= 24] = '1 15-24'
+> ageGroup[ntia$prtage >= 25 & ntia$prtage <= 44] = '2 25-44'
+> ageGroup[ntia$prtage >= 45 & ntia$prtage <= 64] = '3 45-64'
+> workStatus <- ntia$pemlr
+> workStatus[ntia$pemlr == -1] = NA
+> workStatus[ntia$pemlr >= 1 & ntia$pemlr <= 2] = '0 Employed'
+> workStatus[ntia$pemlr >= 3 & ntia$pemlr <= 4] = '1 Unemployed'
+> workStatus[ntia$pemlr >= 5 & ntia$pemlr <= 7] = '2 Not in Labor Force'
+> income <- ntia$hefaminc
+> income[ntia$hefaminc == -1] = NA
+> income[ntia$hefaminc >= 1 & ntia$hefaminc <= 7] = '0 < $25,000'
+> income[ntia$hefaminc >= 8 & ntia$hefaminc <= 9] = '1 $25,000-49,999'
+> income[ntia$hefaminc >= 10 & ntia$hefaminc <= 11] = '1 $25,000-49,999'
+> income[ntia$hefaminc >= 12 & ntia$hefaminc <= 13] = '2 $50,000-74,999'
+> income[ntia$hefaminc == 14] = '3 $75,000-99,999'
+> income[ntia$hefaminc >= 15 & ntia$hefaminc <= 16] = '4 $100,000 +'
+> education <- rep('3 College Degree or More', length(ntia$peeduca))
+> education[ntia$peeduca == -1] = NA
+> education[ntia$peeduca >= 31 & ntia$peeduca <= 38] = '0 No Diploma'
+> education[ntia$peeduca == 39] = '1 High School Diploma'
+> education[ntia$peeduca >= 40 & ntia$peeduca <= 42] = '2 Some College or AA'
+> sex <- ntia$pesex
+> sex[ntia$psex == -1] = NA
+> sex[ntia$psex == 1] = '0 Male'
+> sex[ntia$psex == 2] = '1 Female '
+> race <- rep('5 Other', length(ntia$ptdtrace))
+> race[ntia&ptdtrace == -1] = NA
+Error in race[ntia & ptdtrace == -1] = NA : object 'ptdtrace' not found
+Execution halted
